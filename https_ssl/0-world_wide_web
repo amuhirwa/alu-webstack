@@ -1,17 +1,20 @@
 #!/usr/bin/env bash
-# Prints dns type and ip address
+# Script to get information about subdomains
 
-get_answer() {
-    if [ $# -lt 2 ]; then
-        domain=$1
+get_subdomain_info() {
+    domain="$1"
+    subdomain="$2"
+
+    if [ -z "$subdomain" ]; then
+        subdomains=("www" "lb-01" "web-01" "web-02")
     else
-        domain="$2.$1"
+        subdomains=("$subdomain")
     fi
 
-    answer=($(dig "$domain" | awk '/ANSWER SECTION/{getline; print $4; getline; print $5}'))
-    echo "${answer[@]}"
+    for sub in "${subdomains[@]}"; do
+        answer=$(dig "$sub.$domain" +short)
+        record_type=$(dig "$sub.$domain" | awk '/ANSWER SECTION/{getline; print $4}')
+        echo "The subdomain $sub is a $record_type record and points to $answer"
+    done
 }
-
-answer=($(get_answer $1 $2))
-
-echo "The subdomain google.com is a ${answer[0]} record and points to ${answer[1]}"
+get_subdomain_info "$1" "$2"
