@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Prints dns type and ip address
 
 apt-get update && apt-get upgrade
 apt-get install dnsutils -y
