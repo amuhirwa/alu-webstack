@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+apt-get update && apt-get upgrade
+apt-get install dnsutils -y
+
+get_answer() {
+    if [ $# -lt 2 ]; then
+        domain=$1
+    else
+        domain="$2.$1"
+    fi
+
+    answer=($(dig "$domain" | awk '/ANSWER SECTION/{getline; print $4; getline; print $5}'))
+    echo "${answer[@]}"
+}
+
+answer=($(get_answer $1 $2))
+
+echo "The subdomain google.com is a ${answer[0]} record and points to ${answer[1]}"
