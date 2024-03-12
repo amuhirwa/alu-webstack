@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 # Prints dns type and ip address
 
-apt-get update && apt-get upgrade
-apt-get install dnsutils -y
-
 get_answer() {
     if [ $# -lt 2 ]; then
         domain=$1
